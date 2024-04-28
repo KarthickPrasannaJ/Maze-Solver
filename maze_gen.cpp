@@ -15,16 +15,31 @@ const unordered_map<int,int> DY = {{N,-1},{S,1},{E,0},{W,0}};
 const unordered_map<int,int> Opposites = {{N,S},{S,N},{E,W},{W,E}};
 
 void drawGrid(int width, int height, vector<vector<int>>& grid) {
+    int num = 0;
     cout << " " << string(width * 2 - 1, '_') << endl;
     for (int y = 0; y < height; ++y) {
         cout << "|";
         for (int x = 0; x < width; ++x) {
-            cout << ((grid[y][x] & S) != 0 ? " " : "_");
+            
+            cout << num;
+            if (num < 10) {
+                cout << " ";
+            }
+            if ((grid[y][x] & S) != 0) {
+                cout << " ";
+            } else {
+                cout << "_";
+            }
             if ((grid[y][x] & E) != 0) {
-                cout << (((grid[y][x] | grid[y][x+1]) & S) != 0 ? " " : "_");
+                if (x + 1 < width && ((grid[y][x] | grid[y][x+1]) & S) != 0) {
+                    cout << " ";
+                } else {
+                    cout << "_";
+                }
             } else {
                 cout << "|";
             }
+            num++; 
         }
         cout << endl;
     }
@@ -106,29 +121,30 @@ int main(){
     vector<vector<int>> myGrid(10,vector<int>(10,0));
     carve(0,0,myGrid);
     vector<vector<int>> adjans = maze_to_graph(myGrid);
-    for (int i = 0; i < adjans.size(); i++) {
-        for (int j = 0; j < adjans[i].size(); j++) {
-            cout << adjans[i][j] << " ";    
-        }
-        cout << endl;
-    }
+    // for (int i = 0; i < adjans.size(); i++) {
+    //     for (int j = 0; j < adjans[i].size(); j++) {
+    //         cout << adjans[i][j] << " ";    
+    //     }
+    //     cout << endl;
+    // }
 
-    for (int i = 0; i < myGrid.size(); i++) {
-        for (int j = 0; j < myGrid[i].size(); j++) {
-            cout << myGrid[i][j] << " ";    
-        }
-        cout << endl;
-    }
-
+    // for (int i = 0; i < myGrid.size(); i++) {
+    //     for (int j = 0; j < myGrid[i].size(); j++) {
+    //         cout << myGrid[i][j] << " ";    
+    //     }
+    //     cout << endl;
+    // }
+    cout<<"\nMaze"<<endl;
 
     drawGrid(10,10,myGrid);
 
     vector<int> sol = bfs(adjans,0);
+    cout<<"\nSolution"<<endl;
     for(int i=0;i<sol.size();i++){
-        cout<<sol[i]<<"->";
+        cout<<" -> "<<sol[i];
     }
-    set<int> mySet(sol.begin(),sol.end());
-    cout<<endl;
-    cout<<"set size "<<mySet.size();
+    // set<int> mySet(sol.begin(),sol.end());
+    // cout<<endl;
+    // cout<<"set size "<<mySet.size();
     return 0;
 }
